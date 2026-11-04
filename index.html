@@ -1,0 +1,1607 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Зерно — кофейня-обжарщик в Казани</title>
+  <meta name="description" content="Кофе собственной обжарки в Казани. Обжариваем раз в 7 дней, доставляем по городу за 2 часа и по России СДЭКом.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <style>
+/* =========================================================
+   «Зерно» — кофейня-обжарщик, Казань
+   ========================================================= */
+
+:root {
+  --cream: #F4EADA;
+  --cream-2: #EADBC3;
+  --paper: #FBF6EC;
+  --kraft: #C9A27A;
+  --kraft-dark: #A9815A;
+  --choc: #3A2216;
+  --choc-2: #6B4C3A;
+  --terra: #B9552F;
+  --terra-dark: #9C4524;
+  --terra-soft: #F2D8C8;
+  --olive: #66743A;
+  --olive-soft: #E1E4C8;
+
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(58, 34, 22, .08), 0 8px 24px rgba(58, 34, 22, .10);
+  --shadow-lg: 0 2px 6px rgba(58, 34, 22, .10), 0 18px 40px rgba(58, 34, 22, .18);
+
+  --font-head: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-hand: "Caveat", "Segoe Print", cursive;
+  --font-body: "Manrope", "Segoe UI", Arial, sans-serif;
+
+  --header-h: 72px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 12px); }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--choc);
+  background-color: var(--cream);
+  /* фактура крафт-бумаги: шум + мягкие пятна */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .29 0 0 0 0 .17 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 15% 10%, rgba(201, 162, 122, .18), transparent 55%),
+    radial-gradient(ellipse at 85% 60%, rgba(201, 162, 122, .14), transparent 55%);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body.no-scroll { overflow: hidden; }
+
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+button { font: inherit; color: inherit; cursor: pointer; }
+
+h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 700; line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(2.3rem, 5.2vw, 4rem); letter-spacing: -.01em; }
+h2 { font-size: clamp(2rem, 3.8vw, 2.9rem); }
+h3 { font-size: 1.45rem; }
+
+.hand { font-family: var(--font-hand); font-weight: 700; }
+
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- кнопки ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 52px; padding: 0 26px;
+  border: 2px solid transparent; border-radius: 999px;
+  background: transparent;
+  font-weight: 700; font-size: 1rem; text-decoration: none; white-space: nowrap;
+  transition: background-color .2s, color .2s, border-color .2s, transform .15s, box-shadow .2s;
+}
+.btn svg { width: 20px; height: 20px; flex: none; }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible, .cart-btn:focus-visible, .choose__opt:focus-visible, .sort:focus-visible { outline: 3px solid var(--olive); outline-offset: 3px; }
+
+.btn--primary { background: var(--terra); color: #FFF8F0; box-shadow: 0 4px 0 var(--terra-dark); }
+.btn--primary:hover { background: var(--terra-dark); }
+.btn--ghost { border-color: var(--choc); color: var(--choc); }
+.btn--ghost:hover { background: var(--choc); color: var(--cream); }
+.btn--ghost-light { border-color: var(--cream-2); color: var(--cream); }
+.btn--ghost-light:hover { background: var(--cream); color: var(--choc); }
+.btn--block { width: 100%; }
+.btn--sm { min-height: 44px; padding: 0 18px; font-size: .95rem; }
+
+/* «подпрыгивание» кнопки «В корзину» */
+.btn.is-bouncing { animation: btnBounce .55s cubic-bezier(.28, .84, .42, 1); }
+@keyframes btnBounce {
+  0%   { transform: translateY(0) scale(1, 1); }
+  15%  { transform: translateY(2px) scale(1.06, .9); }
+  40%  { transform: translateY(-10px) scale(.96, 1.06); }
+  62%  { transform: translateY(0) scale(1.04, .95); }
+  80%  { transform: translateY(-3px) scale(1, 1); }
+  100% { transform: translateY(0) scale(1, 1); }
+}
+
+/* ---------- шапка ---------- */
+.header {
+  position: sticky; top: 0; z-index: 50;
+  height: var(--header-h);
+  background: rgba(244, 234, 218, .92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s, box-shadow .2s;
+}
+.header.is-scrolled { border-color: rgba(58, 34, 22, .12); box-shadow: 0 6px 20px rgba(58, 34, 22, .06); }
+.header__inner { height: 100%; display: flex; align-items: center; gap: 32px; }
+
+.logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--font-head); font-size: 1.7rem; font-weight: 700; color: var(--choc); }
+.logo__bean { width: 30px; height: 30px; color: var(--terra); }
+.logo--light { color: var(--cream); }
+.logo--light .logo__bean { color: var(--kraft); }
+
+.nav { display: flex; gap: 26px; margin-left: auto; }
+.nav a { text-decoration: none; font-weight: 600; font-size: .98rem; position: relative; padding: 4px 0; }
+.nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px; background: var(--terra); transform: scaleX(0); transform-origin: left; transition: transform .25s; }
+.nav a:hover::after { transform: scaleX(1); }
+
+.header__actions { display: flex; align-items: center; gap: 12px; }
+
+.cart-btn {
+  position: relative; display: inline-flex; align-items: center; gap: 8px;
+  height: 46px; padding: 0 18px 0 14px;
+  background: var(--choc); color: var(--cream);
+  border: 0; border-radius: 999px; font-weight: 700;
+  transition: background-color .2s;
+}
+.cart-btn:hover { background: #24140C; }
+.cart-btn svg { width: 22px; height: 22px; }
+.cart-btn.is-wiggling svg { animation: wiggle .5s ease; }
+@keyframes wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-14deg); } 60% { transform: rotate(10deg); } }
+
+.cart-count {
+  display: inline-grid; place-items: center;
+  min-width: 26px; height: 26px; padding: 0 7px;
+  background: var(--terra); color: #FFF8F0;
+  border-radius: 999px; font-size: .85rem; font-weight: 700;
+}
+.cart-count.is-bumping { animation: countBump .6s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes countBump {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.55); background: var(--olive); }
+  60%  { transform: scale(.88); }
+  100% { transform: scale(1); }
+}
+
+.burger { display: none; width: 46px; height: 46px; border: 0; background: transparent; padding: 11px; flex-direction: column; justify-content: space-between; }
+.burger span { display: block; height: 2.5px; background: var(--choc); border-radius: 2px; transition: transform .25s, opacity .2s; }
+.burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(9.75px) rotate(45deg); }
+.burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-9.75px) rotate(-45deg); }
+
+/* ---------- первый экран ---------- */
+.hero { padding: 56px 0 88px; overflow: hidden; }
+.hero__inner { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; }
+.hero__kicker { color: var(--terra); font-size: 1.7rem; margin: 0 0 6px; transform: rotate(-2deg); display: inline-block; }
+.hero__sub { font-size: 1.15rem; color: var(--choc-2); max-width: 34em; margin: 22px 0 32px; }
+.hero__buttons { display: flex; flex-wrap: wrap; gap: 14px; }
+.hero__facts { list-style: none; padding: 0; margin: 44px 0 0; display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 28px; }
+.hero__facts li { display: flex; flex-direction: column; border-left: 3px solid var(--kraft); padding-left: 14px; }
+.hero__facts b { font-family: var(--font-head); font-size: 1.6rem; white-space: nowrap; }
+.hero__facts span { font-size: .9rem; color: var(--choc-2); max-width: 11em; line-height: 1.35; }
+
+.hero__art { position: relative; height: 560px; }
+
+/* настоящее фото чашки + живой пар поверх */
+.hero-photo {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  aspect-ratio: 4 / 5; max-width: 100%;
+  border-radius: 18px; overflow: hidden;
+  background: #0B0705;
+  border: 8px solid var(--paper);
+  box-shadow: var(--shadow-lg);
+}
+.hero-photo img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 100%;
+  filter: sepia(.18) saturate(.9) brightness(1.05);
+}
+.hero-photo::after { /* тёплый свет сверху, как от лампы в кофейне */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 30%, rgba(201, 162, 122, .16), transparent 65%);
+}
+.hero-photo__steam {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; mix-blend-mode: screen;
+}
+.hero-photo.is-broken img { display: none; }
+
+.polaroid {
+  position: absolute; margin: 0; width: 180px; z-index: 2;
+  background: var(--paper); padding: 10px 10px 4px; border-radius: 4px;
+  box-shadow: var(--shadow);
+}
+.polaroid .photo { aspect-ratio: 1 / 1; border-radius: 2px; }
+.polaroid figcaption { text-align: center; font-size: 1.3rem; color: var(--choc-2); }
+.polaroid--left { left: 0; top: 40px; transform: rotate(-7deg); }
+.polaroid::before { /* скотч */
+  content: ""; position: absolute; top: -12px; left: 50%; width: 70px; height: 22px; transform: translateX(-50%) rotate(-3deg);
+  background: rgba(225, 228, 200, .75); box-shadow: 0 1px 2px rgba(0,0,0,.06);
+}
+
+.roast-stamp {
+  position: absolute; right: -14px; top: -18px; z-index: 3;
+  width: 104px; height: 104px; border-radius: 50%;
+  display: grid; place-content: center; text-align: center;
+  border: 2px dashed var(--terra); color: var(--terra);
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  transform: rotate(-12deg);
+}
+.roast-stamp span { font-size: 1.3rem; line-height: 1; }
+.roast-stamp b { font-size: .95rem; }
+
+/* ---------- фото-заглушки ---------- */
+.photo {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #6B4A33, #3A2216);
+}
+.photo::after { /* лёгкая «плёнка» вместо глянца */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(201,162,122,.08), rgba(58,34,22,.12));
+  mix-blend-mode: multiply;
+}
+.photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.85) contrast(.98) sepia(.12); }
+
+/* ---------- секции ---------- */
+.section { padding: 96px 0; }
+.section--tight { padding: 8px 0 96px; }
+.section--kraft { background: rgba(201, 162, 122, .22); border-top: 1px dashed rgba(58, 34, 22, .18); border-bottom: 1px dashed rgba(58, 34, 22, .18); }
+.section__head { max-width: 680px; margin-bottom: 48px; }
+.section__kicker { color: var(--terra); font-size: 1.6rem; margin: 0 0 2px; }
+.section__lead { color: var(--choc-2); font-size: 1.08rem; margin: 14px 0 0; }
+
+.only-touch { display: none; }
+@media (hover: none) { .only-hover { display: none; } .only-touch { display: inline; } }
+
+/* ---------- карточки сортов (3D flip) ---------- */
+.sorts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+
+.sort-wrap { display: flex; flex-direction: column; gap: 14px; }
+.sort { perspective: 1200px; height: 430px; outline: none; border-radius: var(--radius); cursor: pointer; }
+.sort__inner {
+  position: relative; width: 100%; height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .75s cubic-bezier(.3, .7, .2, 1);
+}
+@media (hover: hover) {
+  .sort:hover .sort__inner { transform: rotateY(180deg); }
+}
+.sort:focus-visible .sort__inner,
+.sort.is-flipped .sort__inner { transform: rotateY(180deg); }
+
+.sort__face {
+  position: absolute; inset: 0;
+  -webkit-backface-visibility: hidden; backface-visibility: hidden;
+  border-radius: var(--radius);
+  background: var(--paper);
+  border: 1px solid rgba(58, 34, 22, .12);
+  box-shadow: var(--shadow);
+  padding: 22px 22px 20px;
+  display: flex; flex-direction: column;
+}
+.sort__front { align-items: center; text-align: center; }
+.sort__back {
+  transform: rotateY(180deg);
+  background: var(--choc); color: var(--cream); border-color: transparent;
+  background-image: radial-gradient(ellipse at 100% 0%, rgba(201, 162, 122, .22), transparent 60%);
+}
+
+.badge {
+  position: absolute; top: 16px; left: 16px;
+  padding: 4px 12px; border-radius: 999px;
+  background: var(--olive); color: #F6F4E6;
+  font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+}
+.sort__pack { width: 150px; height: 195px; margin: 6px auto 6px; filter: drop-shadow(0 8px 10px rgba(58, 34, 22, .2)); transition: transform .3s; }
+.sort__name { font-family: var(--font-head); font-size: 1.4rem; margin-top: 4px; }
+.sort__country { color: var(--choc-2); font-size: .95rem; }
+.sort__price { margin-top: auto; font-family: var(--font-head); font-size: 1.7rem; color: var(--terra); font-weight: 700; }
+.sort__price small { font-family: var(--font-body); font-size: .85rem; color: var(--choc-2); font-weight: 500; }
+.sort__flip-hint { position: absolute; right: 16px; top: 14px; font-family: var(--font-hand); font-size: 1.15rem; color: var(--choc-2); }
+
+.sort__back h4 { font-size: 1.35rem; }
+.sort__region { font-size: .92rem; color: var(--kraft); margin: 2px 0 14px; }
+.notes { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.notes span { padding: 4px 11px; border-radius: 999px; background: rgba(244, 234, 218, .12); border: 1px solid rgba(244, 234, 218, .25); font-size: .86rem; }
+.profile { display: grid; gap: 8px; margin: 0 0 14px; }
+.profile__row { display: grid; grid-template-columns: 92px 1fr; align-items: center; gap: 10px; font-size: .86rem; }
+.profile__bar { height: 7px; border-radius: 99px; background: rgba(244, 234, 218, .16); overflow: hidden; }
+.profile__bar i { display: block; height: 100%; border-radius: inherit; background: var(--kraft); }
+.facts { margin: auto 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; font-size: .84rem; }
+.facts dt { color: var(--kraft); }
+.facts dd { margin: 0; font-weight: 600; }
+
+.sort-buy { display: flex; align-items: center; gap: 12px; }
+.sort-buy .btn { flex: 1; }
+.sort-wrap.is-highlight .sort__face { box-shadow: 0 0 0 3px var(--olive), var(--shadow-lg); }
+
+/* ---------- шкала обжарки ---------- */
+.roast {
+  background: var(--paper); border-radius: var(--radius);
+  border: 1px solid rgba(58, 34, 22, .12); box-shadow: var(--shadow);
+  padding: 34px 40px 30px;
+  display: grid; grid-template-columns: 280px 1fr; gap: 40px; align-items: center;
+}
+.roast__head p { color: var(--choc-2); margin: 8px 0 0; font-size: .98rem; }
+.roast__track-wrap { position: relative; padding-top: 64px; }
+.roast__track { height: 18px; border-radius: 99px; background: var(--cream-2); overflow: hidden; box-shadow: inset 0 1px 3px rgba(58, 34, 22, .15); }
+.roast__fill {
+  height: 100%; width: 100%; border-radius: inherit;
+  background: linear-gradient(90deg, #E4C49A 0%, #C08A55 30%, #8A5530 55%, #5A3420 78%, #2A160C 100%);
+  /* заполняем слева направо, градиент остаётся на месте */
+  clip-path: inset(0 100% 0 0 round 99px);
+  transition: clip-path 2.2s cubic-bezier(.45, .05, .2, 1);
+}
+.roast.is-filled .roast__fill { clip-path: inset(0 0 0 0 round 99px); }
+.roast__labels { display: flex; justify-content: space-between; margin-top: 10px; font-size: .88rem; font-weight: 600; color: var(--choc-2); }
+
+.roast__markers { position: absolute; inset: 0 0 auto 0; height: 64px; }
+.roast__marker {
+  position: absolute; bottom: 4px; transform: translate(-50%, 8px);
+  display: flex; flex-direction: column; align-items: center;
+  font-size: .8rem; font-weight: 700; white-space: nowrap;
+  opacity: 0; transition: opacity .4s, transform .4s;
+}
+.roast__marker::after { content: ""; width: 2px; height: 14px; background: var(--choc); margin-top: 3px; }
+.roast__marker--up { bottom: 30px; }
+.roast__marker--up::after { height: 40px; }
+.roast.is-filled .roast__marker { opacity: 1; transform: translate(-50%, 0); }
+
+/* ---------- как выбрать ---------- */
+.choose { display: grid; grid-template-columns: 1fr 1.25fr; gap: 28px; align-items: stretch; }
+.choose__options { display: grid; gap: 14px; }
+.choose__opt {
+  display: flex; align-items: center; gap: 18px; text-align: left;
+  padding: 20px 22px; border-radius: var(--radius);
+  background: var(--paper); border: 2px solid rgba(58, 34, 22, .12);
+  transition: border-color .2s, background-color .2s, transform .2s;
+}
+.choose__opt:hover { border-color: var(--kraft-dark); transform: translateX(4px); }
+.choose__opt svg { width: 46px; height: 46px; flex: none; color: var(--terra); }
+.choose__opt b { display: block; font-size: 1.1rem; }
+.choose__opt small { color: var(--choc-2); font-size: .92rem; }
+.choose__opt[aria-selected="true"] { border-color: var(--terra); background: var(--terra-soft); }
+
+.choose__hint {
+  background: var(--choc); color: var(--cream); border-radius: var(--radius);
+  padding: 32px 34px; min-height: 300px; position: relative; overflow: hidden;
+  background-image: radial-gradient(ellipse at 100% 0%, rgba(201, 162, 122, .25), transparent 60%);
+}
+.choose__empty { height: 100%; display: flex; flex-direction: column; justify-content: center; }
+.choose__empty .hand { font-size: 2rem; color: var(--kraft); }
+.choose__empty p { color: rgba(244, 234, 218, .8); max-width: 26em; }
+.hint { animation: hintIn .45s ease both; }
+@keyframes hintIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.hint__label { font-family: var(--font-hand); font-size: 1.5rem; color: var(--kraft); }
+.hint h3 { font-size: 1.9rem; margin: 2px 0 10px; }
+.hint p { color: rgba(244, 234, 218, .86); margin: 0 0 18px; }
+.hint__recipe { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 22px; }
+.hint__recipe div { background: rgba(244, 234, 218, .08); border: 1px solid rgba(244, 234, 218, .18); border-radius: 10px; padding: 10px 12px; }
+.hint__recipe dt { font-size: .78rem; color: var(--kraft); text-transform: uppercase; letter-spacing: .05em; }
+.hint__recipe dd { margin: 2px 0 0; font-weight: 700; font-size: .95rem; }
+.hint__alt { font-size: .92rem; color: rgba(244, 234, 218, .75); margin: 16px 0 0 !important; }
+.hint__buttons { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* ---------- кофейня ---------- */
+.cafe { display: grid; grid-template-columns: 1.3fr 1fr; gap: 28px; }
+.cafe__photos { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1.5fr 1fr; gap: 14px; min-height: 560px; }
+.cafe__photos .photo { border-radius: var(--radius); }
+.photo--big { grid-column: 1 / -1; }
+
+.menu-board {
+  background: var(--paper); border-radius: var(--radius);
+  border: 1px solid rgba(58, 34, 22, .12); box-shadow: var(--shadow);
+  padding: 30px 30px 26px; display: flex; flex-direction: column;
+}
+.menu-board__note { color: var(--terra); font-size: 1.35rem; margin: 0 0 10px; }
+.menu { list-style: none; padding: 0; margin: 0 0 24px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.menu li { display: flex; align-items: baseline; gap: 8px; padding: 9px 0; border-bottom: 1px dashed rgba(58, 34, 22, .14); }
+.menu li:last-child { border-bottom: 0; }
+.menu__name { font-weight: 600; }
+.menu__name small { display: block; font-weight: 400; font-size: .82rem; color: var(--choc-2); }
+.menu__dots { flex: 1; }
+.menu__price { font-weight: 700; color: var(--terra); white-space: nowrap; }
+.menu-board .btn { margin-top: auto; }
+
+/* ---------- отзывы ---------- */
+.reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.review {
+  background: var(--paper); border-radius: var(--radius); padding: 28px 26px 24px;
+  border: 1px solid rgba(58, 34, 22, .12); box-shadow: var(--shadow);
+  display: flex; flex-direction: column; position: relative;
+}
+.review::before { content: "“"; position: absolute; right: 20px; top: 0; font-family: var(--font-head); font-size: 5rem; color: var(--kraft); opacity: .5; line-height: 1; }
+.review:nth-child(2) { transform: rotate(.6deg); }
+.review:nth-child(3) { transform: rotate(-.5deg); }
+.stars { color: var(--terra); letter-spacing: 3px; font-size: 1.05rem; }
+.review p { margin: 12px 0 20px; }
+.review footer { margin-top: auto; display: flex; flex-direction: column; }
+.review footer span { color: var(--choc-2); font-size: .88rem; }
+
+/* ---------- доставка ---------- */
+.delivery { display: grid; grid-template-columns: 1fr 1fr 0.9fr; gap: 24px; }
+.delivery__card {
+  background: var(--paper); border-radius: var(--radius); padding: 30px 28px;
+  border: 1px solid rgba(58, 34, 22, .12); box-shadow: var(--shadow);
+}
+.delivery__icon { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; background: var(--terra-soft); color: var(--terra); margin-bottom: 18px; }
+.delivery__icon svg { width: 36px; height: 36px; }
+.ticks { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 8px; }
+.ticks li { position: relative; padding-left: 26px; }
+.ticks li::before { content: ""; position: absolute; left: 2px; top: .55em; width: 12px; height: 7px; border-left: 2.5px solid var(--olive); border-bottom: 2.5px solid var(--olive); transform: rotate(-45deg); }
+.delivery__cta {
+  border-radius: var(--radius); padding: 30px 28px;
+  border: 2px dashed var(--kraft-dark);
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 16px;
+}
+.delivery__cta .hand { font-size: 1.7rem; line-height: 1.15; margin: 0; color: var(--choc-2); }
+
+/* ---------- подвал ---------- */
+.footer { background: var(--choc); color: var(--cream); padding: 72px 0 0; margin-top: 0; }
+.footer__inner { display: grid; grid-template-columns: 1fr 1.25fr; gap: 48px; }
+.footer__tag { color: var(--kraft); margin: 6px 0 26px; }
+.footer__list { margin: 0 0 28px; display: grid; gap: 16px; }
+.footer__list dt { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--kraft); }
+.footer__list dd { margin: 2px 0 0; font-size: 1.05rem; }
+.footer__list a { text-decoration: none; }
+.footer__list a:hover { text-decoration: underline; }
+.footer__buttons { display: flex; flex-wrap: wrap; gap: 12px; }
+.footer__note { font-size: .78rem; color: rgba(244, 234, 218, .55); margin: 16px 0 0; }
+.footer__map { border-radius: var(--radius); overflow: hidden; min-height: 380px; background: #4A2E1F; border: 4px solid rgba(201, 162, 122, .35); }
+.footer__map iframe { width: 100%; height: 100%; min-height: 380px; border: 0; display: block; filter: sepia(.25) saturate(.85); }
+.footer__bottom { display: flex; justify-content: space-between; padding-top: 28px; padding-bottom: 28px; margin-top: 56px; border-top: 1px solid rgba(244, 234, 218, .14); font-size: .9rem; color: rgba(244, 234, 218, .65); }
+.footer__bottom a { text-decoration: none; }
+.footer__bottom a:hover { color: var(--cream); }
+
+/* ---------- корзина ---------- */
+.overlay { position: fixed; inset: 0; z-index: 80; background: rgba(36, 20, 12, .45); opacity: 0; transition: opacity .3s; }
+.overlay.is-open { opacity: 1; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 90;
+  width: min(440px, 100%);
+  background: var(--cream); box-shadow: -10px 0 40px rgba(36, 20, 12, .25);
+  display: flex; flex-direction: column;
+  transform: translateX(105%); transition: transform .38s cubic-bezier(.3, .7, .2, 1);
+  visibility: hidden;
+}
+.drawer.is-open { transform: none; visibility: visible; }
+.drawer__head { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px dashed rgba(58, 34, 22, .2); }
+.icon-btn { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--cream-2); font-size: 1rem; }
+.icon-btn:hover { background: var(--kraft); }
+.drawer__body { flex: 1; overflow-y: auto; padding: 18px 24px; }
+.drawer__foot { padding: 16px 24px 22px; border-top: 1px dashed rgba(58, 34, 22, .2); background: var(--paper); }
+.drawer__row { display: flex; justify-content: space-between; font-size: .95rem; margin-bottom: 6px; }
+.drawer__row--total { font-size: 1.15rem; margin: 10px 0 14px; }
+.drawer__row--total b { color: var(--terra); font-family: var(--font-head); font-size: 1.4rem; }
+
+.cart-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.cart-item { display: grid; grid-template-columns: 54px 1fr auto; gap: 12px; align-items: center; background: var(--paper); border-radius: 12px; padding: 10px 12px; border: 1px solid rgba(58, 34, 22, .1); }
+.cart-item svg { width: 54px; height: 70px; }
+.cart-item__name { font-weight: 700; line-height: 1.25; }
+.cart-item__price { color: var(--choc-2); font-size: .88rem; }
+.qty { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; }
+.qty button { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid rgba(58, 34, 22, .25); background: transparent; font-weight: 700; line-height: 1; }
+.qty button:hover { background: var(--cream-2); }
+.qty span { min-width: 24px; text-align: center; font-weight: 700; }
+.cart-item__sum { font-weight: 700; color: var(--terra); text-align: right; }
+.cart-item__remove { display: block; margin-top: 6px; margin-left: auto; border: 0; background: none; color: var(--choc-2); font-size: .8rem; text-decoration: underline; padding: 0; }
+
+.cart-empty { text-align: center; padding: 50px 10px; }
+.cart-empty .hand { font-size: 2.2rem; margin: 0; color: var(--kraft-dark); }
+.cart-empty p { margin: 4px 0 20px; color: var(--choc-2); }
+
+.order { margin-top: 24px; display: grid; gap: 12px; }
+.order h4 { font-size: 1.2rem; }
+.order label { display: grid; gap: 4px; font-size: .88rem; font-weight: 600; }
+.order input[type="text"], .order input[type="tel"], .order select {
+  font: inherit; font-weight: 500; font-size: 1rem; padding: 11px 14px; border-radius: 10px;
+  border: 1.5px solid rgba(58, 34, 22, .25); background: var(--paper); color: var(--choc);
+}
+.order input:focus, .order select:focus { outline: 2px solid var(--olive); outline-offset: 1px; }
+.order input.is-invalid { border-color: var(--terra); background: #FBEDE5; }
+.order fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 6px; }
+.order legend { font-size: .88rem; font-weight: 600; margin-bottom: 4px; }
+.order .radio { display: flex; align-items: center; gap: 10px; font-weight: 500; font-size: .95rem; }
+.order .radio input { accent-color: var(--terra); width: 18px; height: 18px; }
+.order__error { color: var(--terra-dark); font-size: .9rem; margin: 0; font-weight: 600; }
+
+.order-done { text-align: center; padding: 60px 10px; }
+.order-done .hand { font-size: 2.6rem; color: var(--terra); margin: 0; }
+.order-done p { color: var(--choc-2); }
+
+/* летящее зёрнышко */
+.fly-bean {
+  position: fixed; z-index: 100; width: 18px; height: 24px; pointer-events: none;
+  background: var(--choc); border-radius: 50%;
+  box-shadow: inset -3px 0 0 rgba(201, 162, 122, .6);
+}
+
+/* тост */
+.toast {
+  position: fixed; left: 50%; bottom: 24px; z-index: 110;
+  transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+  background: var(--choc); color: var(--cream);
+  padding: 12px 20px; border-radius: 999px; font-weight: 600; font-size: .95rem;
+  box-shadow: var(--shadow-lg); transition: opacity .3s, transform .3s;
+  width: max-content; max-width: calc(100% - 32px); text-align: center;
+}
+.toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+
+/* мягкое появление блоков при прокрутке */
+.js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.js .reveal.is-visible { opacity: 1; transform: none; }
+
+/* ---------- адаптив ---------- */
+@media (max-width: 1080px) {
+  .nav { gap: 18px; }
+  .cart-btn__label { display: none; }
+  .sorts { grid-template-columns: repeat(2, 1fr); }
+  .delivery { grid-template-columns: 1fr 1fr; }
+  .delivery__cta { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; }
+  .roast { grid-template-columns: 1fr; gap: 20px; }
+}
+
+@media (max-width: 900px) {
+  :root { --header-h: 64px; }
+  .burger { display: flex; }
+  .nav {
+    position: fixed; top: var(--header-h); left: 0; right: 0;
+    flex-direction: column; gap: 0; padding: 8px 24px 20px;
+    background: var(--cream); border-bottom: 1px solid rgba(58, 34, 22, .12);
+    box-shadow: 0 16px 30px rgba(58, 34, 22, .12);
+    transform: translateY(-12px); opacity: 0; visibility: hidden;
+    transition: transform .25s, opacity .25s, visibility .25s;
+  }
+  .nav.is-open { transform: none; opacity: 1; visibility: visible; }
+  .nav a { padding: 14px 0; border-bottom: 1px dashed rgba(58, 34, 22, .14); font-size: 1.05rem; }
+  .nav a::after { display: none; }
+  .header__actions { margin-left: auto; }
+
+  .hero { padding: 24px 0 64px; }
+  .hero__inner { grid-template-columns: 1fr; gap: 24px; }
+  /* на узком экране сначала чашка с паром, потом заголовок и кнопки */
+  .hero__art { order: -1; height: 440px; max-width: 520px; width: 100%; margin: 0 auto; }
+  .hero__text { display: flex; flex-direction: column; align-items: flex-start; }
+  .hero__buttons { margin-top: 22px; }
+  .hero__sub { order: 2; margin: 22px 0 0; }
+  .hero__facts { order: 3; margin-top: 28px; }
+  .polaroid { width: 150px; }
+
+  .choose { grid-template-columns: 1fr; }
+  .cafe { grid-template-columns: 1fr; }
+  .reviews { grid-template-columns: 1fr; }
+  .review:nth-child(n) { transform: none; }
+  .footer__inner { grid-template-columns: 1fr; }
+  .section { padding: 72px 0; }
+  .section--tight { padding: 0 0 72px; }
+}
+
+@media (max-width: 620px) {
+  body { font-size: 16px; }
+  .container { padding: 0 16px; }
+  .hero__buttons .btn { flex: 1 1 100%; }
+  .hero__facts { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .hero__facts li { padding-left: 10px; }
+  .hero__facts b { font-size: clamp(1rem, 5.4vw, 1.3rem); }
+  .hero__facts span { font-size: .8rem; }
+  .hero { padding-top: 16px; }
+  .hero__art { height: auto; margin-top: 4px; }
+  .hero-photo { position: relative; top: auto; right: auto; bottom: auto; width: 100%; aspect-ratio: 1 / 1; border-width: 6px; }
+  .hero__buttons { width: 100%; }
+  .polaroid { width: 88px; padding: 5px 5px 1px; }
+  .polaroid figcaption { font-size: .85rem; }
+  .polaroid::before { width: 48px; height: 16px; top: -9px; }
+  .polaroid--left { left: -6px; top: -8px; }
+  .roast-stamp { width: 84px; height: 84px; right: -6px; top: -14px; }
+  .roast-stamp span { font-size: 1.05rem; }
+  .roast-stamp b { font-size: .8rem; }
+  .sorts { grid-template-columns: 1fr; }
+  .sort { height: 420px; }
+  .roast { padding: 24px 18px; }
+  .roast__marker { font-size: .7rem; }
+  .delivery { grid-template-columns: 1fr; }
+  .delivery__cta { flex-direction: column; align-items: flex-start; }
+  .cafe__photos { min-height: 420px; }
+  .hint__recipe { grid-template-columns: 1fr; }
+  .choose__hint { padding: 26px 22px; }
+  .footer__bottom { flex-direction: column; gap: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+}
+</style>
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<!-- ============ ШАПКА ============ -->
+<header class="header" id="top">
+  <div class="container header__inner">
+    <a href="#top" class="logo" aria-label="Зерно — на главную">
+      <svg class="logo__bean" viewBox="0 0 32 32" aria-hidden="true">
+        <ellipse cx="16" cy="16" rx="10" ry="14" transform="rotate(30 16 16)" fill="currentColor"/>
+        <path d="M10 6 C 20 12, 12 20, 22 26" stroke="var(--cream)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      </svg>
+      <span>Зерно</span>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Основная навигация">
+      <a href="#sorts">Сорта</a>
+      <a href="#choose">Как выбрать</a>
+      <a href="#cafe">Кофейня</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#delivery">Доставка</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+
+    <div class="header__actions">
+      <button class="cart-btn" id="cartBtn" type="button" aria-label="Открыть корзину">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span class="cart-btn__label">Корзина</span>
+        <span class="cart-count" id="cartCount" aria-live="polite">0</span>
+      </button>
+      <button class="burger" id="burger" type="button" aria-label="Меню" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ ПЕРВЫЙ ЭКРАН ============ -->
+<section class="hero">
+  <div class="container hero__inner">
+    <div class="hero__text">
+      <p class="hand hero__kicker">обжарено в Казани</p>
+      <h1>Кофе, который мы обжарили на&nbsp;этой неделе</h1>
+      <p class="hero__sub">Обжариваем зерно раз в 7 дней маленькими партиями — поэтому в каждой пачке кофе не старше недели. Привезём по Казани за 2 часа или отправим СДЭКом по всей России.</p>
+      <div class="hero__buttons">
+        <a href="#sorts" class="btn btn--primary">Выбрать зерно</a>
+        <a href="https://2gis.ru/kazan/search/%D0%9F%D1%80%D0%BE%D1%84%D1%81%D0%BE%D1%8E%D0%B7%D0%BD%D0%B0%D1%8F%2017" target="_blank" rel="noopener" class="btn btn--ghost">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="9.5" r="2.5" fill="currentColor"/></svg>
+          Прийти в кофейню
+        </a>
+      </div>
+      <ul class="hero__facts">
+        <li><b>7 дней</b><span>максимальный возраст обжарки</span></li>
+        <li><b>2 часа</b><span>доставка по Казани</span></li>
+        <li><b>6 сортов</b><span>из 6 стран в этом сезоне</span></li>
+      </ul>
+    </div>
+
+    <div class="hero__art" aria-hidden="true">
+      <div class="hero-photo" id="heroPhoto">
+        <img src="https://images.unsplash.com/photo-1691775755061-f34cd860e85d?w=900&q=80&auto=format&fit=crop" alt="" data-rim-x=".45" data-rim-y=".69" data-rim-w=".42" onerror="this.parentNode.classList.add('is-broken')">
+        <canvas class="hero-photo__steam" id="steamCanvas"></canvas>
+      </div>
+
+      <figure class="polaroid polaroid--left">
+        <div class="photo"><img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=500&q=75&auto=format&fit=crop" alt="" onerror="this.remove()"></div>
+        <figcaption class="hand">свежая обжарка</figcaption>
+      </figure>
+
+      <div class="roast-stamp">
+        <span class="hand">обжарка</span>
+        <b id="roastDate">пн, 2 ноя</b>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ СОРТА ============ -->
+<section class="section" id="sorts">
+  <div class="container">
+    <div class="section__head">
+      <p class="hand section__kicker">в этой обжарке</p>
+      <h2>Шесть сортов недели</h2>
+      <p class="section__lead"><span class="only-hover">Наведите на пачку</span><span class="only-touch">Нажмите на пачку</span>, чтобы узнать вкус и регион. Цена — за 250&nbsp;г.</p>
+    </div>
+    <div class="sorts" id="sortsGrid"><!-- карточки рендерятся из script.js --></div>
+  </div>
+</section>
+
+<!-- ============ ШКАЛА ОБЖАРКИ ============ -->
+<section class="section section--tight">
+  <div class="container">
+    <div class="roast" id="roastScale">
+      <div class="roast__head">
+        <h3>Шкала обжарки</h3>
+        <p>Светлая раскрывает кислотность и фрукты, тёмная — шоколад и горчинку.</p>
+      </div>
+      <div class="roast__track-wrap">
+        <div class="roast__markers" id="roastMarkers"></div>
+        <div class="roast__track"><div class="roast__fill"></div></div>
+        <div class="roast__labels"><span>Светлая</span><span>Средняя</span><span>Тёмная</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ КАК ВЫБРАТЬ ============ -->
+<section class="section section--kraft" id="choose">
+  <div class="container">
+    <div class="section__head">
+      <p class="hand section__kicker">подскажем</p>
+      <h2>Как выбрать зерно</h2>
+      <p class="section__lead">В чём вы варите кофе дома? Выберите — и мы предложим сорт и помол.</p>
+    </div>
+
+    <div class="choose">
+      <div class="choose__options" role="tablist" aria-label="Способ заваривания">
+        <button class="choose__opt" role="tab" type="button" data-method="turka" aria-selected="false">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M12 18h20l-2 22H14L12 18Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M12 18c-2-3 0-5 3-5h14c3 0 4 2 3 5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M31 24h12" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          <span><b>Варю в турке</b><small>Плотно, крепко, с пенкой</small></span>
+        </button>
+        <button class="choose__opt" role="tab" type="button" data-method="machine" aria-selected="false">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="10" y="6" width="28" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M14 18v4h20v-4" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M18 22l1 6h10l1-6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M17 34h14l-1 8H18l-1-8Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>
+          <span><b>У меня кофемашина</b><small>Эспрессо, капучино, рожок</small></span>
+        </button>
+        <button class="choose__opt" role="tab" type="button" data-method="filter" aria-selected="false">
+          <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 10h32L28 28h-8L8 10Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M24 30v3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 4"/><path d="M14 36h20v6H14z" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
+          <span><b>Завариваю фильтр</b><small>Воронка, кемекс, аэропресс</small></span>
+        </button>
+      </div>
+
+      <div class="choose__hint" id="chooseHint" role="tabpanel" aria-live="polite">
+        <div class="choose__empty">
+          <span class="hand">← выберите способ</span>
+          <p>Подберём сорт, помол и пропорции под ваш способ заваривания.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ КОФЕЙНЯ ============ -->
+<section class="section" id="cafe">
+  <div class="container">
+    <div class="section__head">
+      <p class="hand section__kicker">приходите</p>
+      <h2>Кофейня на Профсоюзной</h2>
+      <p class="section__lead">Здесь же стоит наш ростер — по понедельникам пахнет на всю улицу. Заходите на чашку или за пачкой с собой.</p>
+    </div>
+
+    <div class="cafe">
+      <div class="cafe__photos">
+        <div class="photo photo--big"><img src="https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=1000&q=75&auto=format&fit=crop" alt="Барная стойка кофейни «Зерно»" loading="lazy" onerror="this.remove()"></div>
+        <div class="photo"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=75&auto=format&fit=crop" alt="Руки гостей с чашками капучино" loading="lazy" onerror="this.remove()"></div>
+        <div class="photo"><img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600&q=75&auto=format&fit=crop" alt="Холдеры с молотым кофе и зёрнами" loading="lazy" onerror="this.remove()"></div>
+      </div>
+
+      <div class="menu-board">
+        <h3>Меню напитков</h3>
+        <p class="hand menu-board__note">на зерне этой недели</p>
+        <ul class="menu" id="drinkMenu"><!-- из script.js --></ul>
+        <a href="https://2gis.ru/kazan/search/%D0%9F%D1%80%D0%BE%D1%84%D1%81%D0%BE%D1%8E%D0%B7%D0%BD%D0%B0%D1%8F%2017" target="_blank" rel="noopener" class="btn btn--primary btn--block">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="9.5" r="2.5" fill="currentColor"/></svg>
+          Маршрут в 2ГИС
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ОТЗЫВЫ ============ -->
+<section class="section section--kraft" id="reviews">
+  <div class="container">
+    <div class="section__head">
+      <p class="hand section__kicker">что говорят</p>
+      <h2>Отзывы гостей</h2>
+    </div>
+    <div class="reviews">
+      <article class="review">
+        <div class="stars" aria-label="5 из 5">★★★★★</div>
+        <p>«Беру Эфиопию уже третий месяц. В воронке — настоящий бергамот, как в чае. И правда видно дату обжарки на пачке, ни разу не было старше недели».</p>
+        <footer><b>Алина Г.</b><span>отзыв в 2ГИС</span></footer>
+      </article>
+      <article class="review">
+        <div class="stars" aria-label="5 из 5">★★★★★</div>
+        <p>«Заказал Бразилию под турку, курьер привёз через полтора часа. Бариста в кофейне ещё и объяснил, как не убежать пенке. Теперь хожу по субботам».</p>
+        <footer><b>Тимур Х.</b><span>отзыв в Яндекс Картах</span></footer>
+      </article>
+      <article class="review">
+        <div class="stars" aria-label="5 из 5">★★★★★</div>
+        <p>«Живу в Екатеринбурге, заказываю СДЭКом. Дошло за 3 дня, пачка с клапаном, аромат как будто только с ростера. Колумбия — лучшее для моей кофемашины».</p>
+        <footer><b>Ольга В.</b><span>заказ по России</span></footer>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ДОСТАВКА ============ -->
+<section class="section" id="delivery">
+  <div class="container">
+    <div class="section__head">
+      <p class="hand section__kicker">привезём</p>
+      <h2>Доставка</h2>
+    </div>
+    <div class="delivery">
+      <article class="delivery__card">
+        <div class="delivery__icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><circle cx="14" cy="36" r="5" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="36" cy="36" r="5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M14 36h12l6-14h-8M32 22l4 14M20 22h-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M30 14h6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </div>
+        <h3>По Казани — за 2 часа</h3>
+        <ul class="ticks">
+          <li>Курьером в пределах города</li>
+          <li>250 ₽, бесплатно от 2 000 ₽</li>
+          <li>Заказы до 20:00 — привезём сегодня</li>
+          <li>Самовывоз из кофейни — бесплатно</li>
+        </ul>
+      </article>
+      <article class="delivery__card">
+        <div class="delivery__icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><path d="M8 16l16-8 16 8v18l-16 8-16-8V16Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M8 16l16 8 16-8M24 24v18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>По России — СДЭКом</h3>
+        <ul class="ticks">
+          <li>2–7 дней, в пункт выдачи или курьером</li>
+          <li>Стоимость считается при оформлении</li>
+          <li>Отправляем в день обжарки</li>
+          <li>Трек-номер приходит в СМС</li>
+        </ul>
+      </article>
+      <div class="delivery__cta">
+        <p class="hand">пачка 250 г — это примерно 16 чашек</p>
+        <a href="#sorts" class="btn btn--primary">Выбрать зерно</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ ПОДВАЛ ============ -->
+<footer class="footer" id="contacts">
+  <div class="container footer__inner">
+    <div class="footer__info">
+      <a href="#top" class="logo logo--light">
+        <svg class="logo__bean" viewBox="0 0 32 32" aria-hidden="true">
+          <ellipse cx="16" cy="16" rx="10" ry="14" transform="rotate(30 16 16)" fill="currentColor"/>
+          <path d="M10 6 C 20 12, 12 20, 22 26" stroke="var(--choc)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        </svg>
+        <span>Зерно</span>
+      </a>
+      <p class="footer__tag">Кофейня и обжарочная в Казани</p>
+
+      <dl class="footer__list">
+        <div><dt>Адрес</dt><dd>Казань, ул. Профсоюзная, 17</dd></div>
+        <div><dt>Часы работы</dt><dd>Пн–Пт 8:00–21:00<br>Сб–Вс 9:00–22:00</dd></div>
+        <div><dt>Телефон</dt><dd><a href="tel:+78430000000">+7 (843) 000-00-00</a></dd></div>
+      </dl>
+
+      <div class="footer__buttons">
+        <a href="https://2gis.ru/kazan/search/%D0%9F%D1%80%D0%BE%D1%84%D1%81%D0%BE%D1%8E%D0%B7%D0%BD%D0%B0%D1%8F%2017" target="_blank" rel="noopener" class="btn btn--primary">Открыть в 2ГИС</a>
+        <a href="https://instagram.com/" target="_blank" rel="noopener" class="btn btn--ghost-light">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></svg>
+          Instagram*
+        </a>
+      </div>
+      <p class="footer__note">* Instagram принадлежит компании Meta, признанной экстремистской и запрещённой в РФ.</p>
+    </div>
+
+    <div class="footer__map">
+      <iframe title="Карта: кофейня «Зерно»" loading="lazy"
+        src="https://www.openstreetmap.org/export/embed.html?bbox=49.100%2C55.784%2C49.126%2C55.796&amp;layer=mapnik&amp;marker=55.7900%2C49.1130"></iframe>
+    </div>
+  </div>
+  <div class="container footer__bottom">
+    <span>© <span id="year">2026</span> «Зерно»</span>
+    <a href="#top">Наверх ↑</a>
+  </div>
+</footer>
+
+<!-- ============ КОРЗИНА ============ -->
+<div class="overlay" id="overlay" hidden></div>
+<aside class="drawer" id="drawer" aria-label="Корзина" aria-hidden="true">
+  <div class="drawer__head">
+    <h3>Корзина</h3>
+    <button class="icon-btn" id="drawerClose" type="button" aria-label="Закрыть корзину">✕</button>
+  </div>
+
+  <div class="drawer__body" id="drawerBody">
+    <ul class="cart-list" id="cartList"></ul>
+    <div class="cart-empty" id="cartEmpty">
+      <p class="hand">пока пусто</p>
+      <p>Добавьте пачку-другую свежей обжарки.</p>
+      <a href="#sorts" class="btn btn--primary" data-close-drawer>Выбрать зерно</a>
+    </div>
+
+    <form class="order" id="orderForm" novalidate>
+      <h4>Оформление</h4>
+      <label>Имя<input name="name" type="text" autocomplete="name" required placeholder="Как к вам обращаться"></label>
+      <label>Телефон<input name="phone" type="tel" autocomplete="tel" required placeholder="+7 (___) ___-__-__"></label>
+      <label>Помол
+        <select name="grind">
+          <option>В зёрнах</option>
+          <option>Под турку</option>
+          <option>Под эспрессо</option>
+          <option>Под фильтр / воронку</option>
+          <option>Под френч-пресс</option>
+        </select>
+      </label>
+      <fieldset>
+        <legend>Доставка</legend>
+        <label class="radio"><input type="radio" name="delivery" value="city" checked> По Казани за 2 часа</label>
+        <label class="radio"><input type="radio" name="delivery" value="cdek"> По России СДЭКом</label>
+        <label class="radio"><input type="radio" name="delivery" value="pickup"> Самовывоз из кофейни</label>
+      </fieldset>
+      <p class="order__error" id="orderError" hidden>Укажите имя и телефон, чтобы мы могли подтвердить заказ.</p>
+    </form>
+
+    <div class="order-done" id="orderDone" hidden>
+      <p class="hand">спасибо!</p>
+      <p>Заказ принят. Перезвоним в течение 15 минут, чтобы подтвердить детали.</p>
+      <button class="btn btn--primary" type="button" id="doneClose">Хорошо</button>
+    </div>
+  </div>
+
+  <div class="drawer__foot" id="drawerFoot">
+    <div class="drawer__row"><span>Товары</span><b id="cartSubtotal">0 ₽</b></div>
+    <div class="drawer__row"><span>Доставка</span><b id="cartDelivery">250 ₽</b></div>
+    <div class="drawer__row drawer__row--total"><span>Итого</span><b id="cartTotal">0 ₽</b></div>
+    <button class="btn btn--primary btn--block" type="submit" form="orderForm" id="orderSubmit">Оформить заказ</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =========================================================
+   «Зерно» — логика страницы
+   ========================================================= */
+(function () {
+  'use strict';
+
+  /* ---------- данные ---------- */
+  // roast: 1 (очень светлая) … 10 (очень тёмная)
+  var SORTS = [
+    {
+      id: 'ethiopia', name: 'Эфиопия Иргачеффе', country: 'Эфиопия', price: 890, badge: 'новинка',
+      color: '#7A8C3E', roast: 2, roastName: 'светлая',
+      notes: ['бергамот', 'жасмин', 'лимон', 'мёд'],
+      region: 'Иргачеффе, зона Гедео', process: 'Мытая', altitude: '1 900–2 200 м', variety: 'Эфиопские heirloom',
+      profile: { acidity: 5, body: 2, sweetness: 4 }
+    },
+    {
+      id: 'kenya', name: 'Кения Ньери АА', country: 'Кения', price: 950, badge: null,
+      color: '#8E3B46', roast: 3, roastName: 'светлая',
+      notes: ['чёрная смородина', 'грейпфрут', 'тростниковый сахар'],
+      region: 'Ньери, склоны горы Кения', process: 'Мытая', altitude: '1 700–1 900 м', variety: 'SL28, SL34',
+      profile: { acidity: 5, body: 3, sweetness: 3 }
+    },
+    {
+      id: 'colombia', name: 'Колумбия Уила', country: 'Колумбия', price: 790, badge: 'хит',
+      color: '#C2603A', roast: 5, roastName: 'средняя',
+      notes: ['карамель', 'красное яблоко', 'какао'],
+      region: 'Уила, Питалито', process: 'Мытая', altitude: '1 600–1 800 м', variety: 'Кастильо, Катурра',
+      profile: { acidity: 3, body: 3, sweetness: 4 }
+    },
+    {
+      id: 'guatemala', name: 'Гватемала Антигуа', country: 'Гватемала', price: 820, badge: null,
+      color: '#B07A2E', roast: 6, roastName: 'средняя',
+      notes: ['тёмный шоколад', 'апельсин', 'специи'],
+      region: 'Антигуа, вулканические почвы', process: 'Мытая', altitude: '1 500–1 700 м', variety: 'Бурбон',
+      profile: { acidity: 3, body: 4, sweetness: 3 }
+    },
+    {
+      id: 'brazil', name: 'Бразилия Серрадо', country: 'Бразилия', price: 690, badge: 'хит',
+      color: '#5E7A4A', roast: 7, roastName: 'средне-тёмная',
+      notes: ['молочный шоколад', 'фундук', 'карамель'],
+      region: 'Серрадо Минейро', process: 'Натуральная', altitude: '1 000–1 200 м', variety: 'Жёлтый Катуай',
+      profile: { acidity: 1, body: 4, sweetness: 4 }
+    },
+    {
+      id: 'sumatra', name: 'Суматра Манделинг', country: 'Индонезия', price: 740, badge: 'новинка',
+      color: '#3A2216', roast: 9, roastName: 'тёмная',
+      notes: ['горький шоколад', 'кедр', 'пряности'],
+      region: 'Северная Суматра, озеро Тоба', process: 'Гилинг басах', altitude: '1 100–1 500 м', variety: 'Тим-Тим, Абиссиния',
+      profile: { acidity: 1, body: 5, sweetness: 2 }
+    }
+  ];
+
+  var DRINKS = [
+    { name: 'Эспрессо', desc: '30 мл, зерно недели', price: 150 },
+    { name: 'Американо', desc: '250 мл', price: 180 },
+    { name: 'Капучино', desc: '250 / 350 мл', price: '240 / 280' },
+    { name: 'Флэт уайт', desc: 'двойной эспрессо и молоко', price: 260 },
+    { name: 'Раф лавандовый', desc: 'сливки, лаванда, ваниль', price: 290 },
+    { name: 'Фильтр-кофе дня', desc: 'воронка V60, 300 мл', price: 220 },
+    { name: 'Кофе в турке', desc: 'на песке, с кардамоном', price: 230 },
+    { name: 'Колд брю', desc: '18 часов настаивания', price: 270 }
+  ];
+
+  var METHODS = {
+    turka: {
+      label: 'для турки', sort: 'brazil', alt: 'sumatra',
+      why: 'Плотное тело, шоколад и орех без лишней кислотности — то, что нужно для густого кофе с пенкой. Натуральная обработка добавляет сладости.',
+      grind: 'Самый мелкий, «в пудру»', ratio: '10 г на 100 мл', temp: 'Снять до кипения'
+    },
+    machine: {
+      label: 'для кофемашины', sort: 'colombia', alt: 'brazil',
+      why: 'Сбалансированная средняя обжарка: в эспрессо — карамель и какао, а с молоком получается мягкий сладкий капучино без горечи.',
+      grind: 'Мелкий, под эспрессо', ratio: '18 г → 36 г напитка', temp: '93 °C, 27–30 сек'
+    },
+    filter: {
+      label: 'для фильтра', sort: 'ethiopia', alt: 'kenya',
+      why: 'Светлая обжарка раскрывается в воронке как чай: бергамот, жасмин и цитрус. Чем чище метод, тем ярче эти ноты.',
+      grind: 'Средний, как морская соль', ratio: '15 г на 250 мл', temp: '94 °C, 3 минуты'
+    }
+  };
+
+  var DELIVERY_CITY = 250;
+  var FREE_FROM = 2000;
+
+  var byId = {};
+  SORTS.forEach(function (s) { byId[s.id] = s; });
+
+  var $ = function (sel, root) { return (root || document).querySelector(sel); };
+  var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+  var rub = function (n) { return n.toLocaleString('ru-RU') + ' ₽'; };
+
+  /* ---------- пачка (SVG) ---------- */
+  function packSVG(s, cls) {
+    var g = 'pk-' + s.id + '-' + Math.random().toString(36).slice(2, 7);
+    var words = s.name.split(' ');
+    var line1 = words[0];
+    var line2 = words.slice(1).join(' ');
+    var dots = '';
+    for (var i = 0; i < 5; i++) {
+      var filled = i < Math.round(s.roast / 2);
+      dots += '<circle cx="' + (80 + i * 10) + '" cy="196" r="3.2" fill="' + (filled ? '#3A2216' : 'none') + '" stroke="#3A2216" stroke-width="1.2"/>';
+    }
+    return '' +
+      '<svg class="' + (cls || '') + '" viewBox="0 0 200 260" aria-hidden="true">' +
+        '<defs>' +
+          '<linearGradient id="' + g + '" x1="0" x2="1">' +
+            '<stop offset="0" stop-color="#B58C62"/><stop offset=".18" stop-color="#CFA97F"/>' +
+            '<stop offset=".7" stop-color="#C69E73"/><stop offset="1" stop-color="#A47A52"/>' +
+          '</linearGradient>' +
+        '</defs>' +
+        '<path d="M30 44 L170 44 L178 244 Q178 252 170 252 L30 252 Q22 252 22 244 Z" fill="url(#' + g + ')" stroke="#7E5A3A" stroke-width="1.5"/>' +
+        '<path d="M28 22 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l8 6 l8 -6 l4 4 V48 H28 Z" fill="#A98058" stroke="#7E5A3A" stroke-width="1.5" stroke-linejoin="round"/>' +
+        '<path d="M28 34 H172" stroke="#7E5A3A" stroke-width="1" stroke-dasharray="3 3"/>' +
+        '<circle cx="100" cy="72" r="8" fill="#9A7350" stroke="#7E5A3A" stroke-width="1.5"/>' +
+        '<circle cx="100" cy="72" r="3" fill="#7E5A3A"/>' +
+        '<rect x="44" y="94" width="112" height="118" rx="4" fill="#FBF6EC" stroke="#7E5A3A" stroke-width="1"/>' +
+        '<rect x="44" y="94" width="112" height="24" rx="4" fill="' + s.color + '"/>' +
+        '<rect x="44" y="110" width="112" height="8" fill="' + s.color + '"/>' +
+        '<text x="100" y="111" text-anchor="middle" font-family="Playfair Display, Georgia, serif" font-weight="700" font-size="13" letter-spacing="3" fill="#FBF6EC">ЗЕРНО</text>' +
+        '<text x="100" y="142" text-anchor="middle" font-family="Playfair Display, Georgia, serif" font-weight="700" font-size="16" fill="#3A2216">' + line1 + '</text>' +
+        '<text x="100" y="161" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="17" fill="#3A2216">' + line2 + '</text>' +
+        '<text x="100" y="182" text-anchor="middle" font-family="Manrope, Arial, sans-serif" font-size="9" fill="#6B4C3A">250 г · в зёрнах</text>' +
+        dots +
+      '</svg>';
+  }
+
+  /* ---------- карточки сортов ---------- */
+  function renderSorts() {
+    var grid = $('#sortsGrid');
+    grid.innerHTML = SORTS.map(function (s) {
+      var bars = [['Кислотность', s.profile.acidity], ['Плотность', s.profile.body], ['Сладость', s.profile.sweetness]]
+        .map(function (r) {
+          return '<div class="profile__row"><span>' + r[0] + '</span><div class="profile__bar"><i style="width:' + (r[1] * 20) + '%"></i></div></div>';
+        }).join('');
+      return '' +
+        '<div class="sort-wrap reveal" id="sort-' + s.id + '">' +
+          '<div class="sort" tabindex="0" aria-label="' + s.name + ': вкус и регион">' +
+            '<div class="sort__inner">' +
+              '<div class="sort__face sort__front">' +
+                (s.badge ? '<span class="badge">' + s.badge + '</span>' : '') +
+                '<span class="sort__flip-hint">вкус ↻</span>' +
+                packSVG(s, 'sort__pack') +
+                '<div class="sort__name">' + s.name + '</div>' +
+                '<div class="sort__country">' + s.country + ' · обжарка ' + s.roastName + '</div>' +
+                '<div class="sort__price">' + rub(s.price) + ' <small>/ 250 г</small></div>' +
+              '</div>' +
+              '<div class="sort__face sort__back">' +
+                '<h4>' + s.name + '</h4>' +
+                '<div class="sort__region">' + s.region + '</div>' +
+                '<div class="notes">' + s.notes.map(function (n) { return '<span>' + n + '</span>'; }).join('') + '</div>' +
+                '<div class="profile">' + bars + '</div>' +
+                '<dl class="facts">' +
+                  '<div><dt>Обработка</dt><dd>' + s.process + '</dd></div>' +
+                  '<div><dt>Высота</dt><dd>' + s.altitude + '</dd></div>' +
+                  '<div><dt>Разновидность</dt><dd>' + s.variety + '</dd></div>' +
+                  '<div><dt>Обжарка</dt><dd>' + s.roastName + '</dd></div>' +
+                '</dl>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="sort-buy">' +
+            '<button class="btn btn--primary" type="button" data-add="' + s.id + '">В корзину · ' + rub(s.price) + '</button>' +
+          '</div>' +
+        '</div>';
+    }).join('');
+
+    // на сенсорных экранах переворот по нажатию
+    var touch = window.matchMedia('(hover: none)');
+    $$('.sort', grid).forEach(function (card) {
+      card.addEventListener('click', function () {
+        if (touch.matches) card.classList.toggle('is-flipped');
+      });
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.classList.toggle('is-flipped'); }
+      });
+      card.addEventListener('blur', function () { card.classList.remove('is-flipped'); });
+    });
+  }
+
+  /* ---------- шкала обжарки ---------- */
+  function renderRoast() {
+    var wrap = $('#roastMarkers');
+    var sorted = SORTS.slice().sort(function (a, b) { return a.roast - b.roast; });
+    wrap.innerHTML = sorted.map(function (s, i) {
+      var pos = ((s.roast - 0.5) / 10) * 100;
+      var delay = 0.25 + (pos / 100) * 2;   // маркер появляется, когда до него «доезжает» заливка
+      return '<span class="roast__marker' + (i % 2 ? ' roast__marker--up' : '') + '" style="left:' + pos + '%;transition-delay:' + delay.toFixed(2) + 's">' +
+        s.name.split(' ')[0] + '</span>';
+    }).join('');
+
+    var block = $('#roastScale');
+    if (!('IntersectionObserver' in window)) { block.classList.add('is-filled'); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { block.classList.add('is-filled'); io.disconnect(); }
+      });
+    }, { threshold: 0.5 });
+    io.observe(block);
+  }
+
+  /* ---------- меню напитков ---------- */
+  function renderMenu() {
+    $('#drinkMenu').innerHTML = DRINKS.map(function (d) {
+      var price = typeof d.price === 'number' ? rub(d.price) : d.price + ' ₽';
+      return '<li><span class="menu__name">' + d.name + '<small>' + d.desc + '</small></span><span class="menu__dots"></span><span class="menu__price">' + price + '</span></li>';
+    }).join('');
+  }
+
+  /* ---------- как выбрать ---------- */
+  function initChoose() {
+    var opts = $$('.choose__opt');
+    var panel = $('#chooseHint');
+    opts.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        opts.forEach(function (b) { b.setAttribute('aria-selected', b === btn ? 'true' : 'false'); });
+        var m = METHODS[btn.dataset.method];
+        var s = byId[m.sort];
+        var alt = byId[m.alt];
+        panel.innerHTML = '' +
+          '<div class="hint">' +
+            '<div class="hint__label">' + m.label + ' советуем</div>' +
+            '<h3>' + s.name + '</h3>' +
+            '<p>' + m.why + '</p>' +
+            '<dl class="hint__recipe">' +
+              '<div><dt>Помол</dt><dd>' + m.grind + '</dd></div>' +
+              '<div><dt>Пропорция</dt><dd>' + m.ratio + '</dd></div>' +
+              '<div><dt>Заваривание</dt><dd>' + m.temp + '</dd></div>' +
+            '</dl>' +
+            '<div class="hint__buttons">' +
+              '<button class="btn btn--primary" type="button" data-add="' + s.id + '">В корзину · ' + rub(s.price) + '</button>' +
+              '<button class="btn btn--ghost-light" type="button" data-show="' + s.id + '">Посмотреть сорт</button>' +
+            '</div>' +
+            '<p class="hint__alt">Хочется другого? Попробуйте <b>' + alt.name + '</b> — ' + alt.notes.slice(0, 2).join(', ') + '.</p>' +
+          '</div>';
+      });
+    });
+
+    document.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-show]');
+      if (!b) return;
+      var wrap = $('#sort-' + b.dataset.show);
+      wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      wrap.classList.add('is-highlight');
+      var card = $('.sort', wrap);
+      setTimeout(function () { card.classList.add('is-flipped'); }, 700);
+      setTimeout(function () { card.classList.remove('is-flipped'); wrap.classList.remove('is-highlight'); }, 3600);
+    });
+  }
+
+  /* ---------- корзина ---------- */
+  var cart = {};
+  try { cart = JSON.parse(localStorage.getItem('zerno-cart')) || {}; } catch (e) { cart = {}; }
+  Object.keys(cart).forEach(function (id) { if (!byId[id] || !(cart[id] > 0)) delete cart[id]; });
+
+  function save() { try { localStorage.setItem('zerno-cart', JSON.stringify(cart)); } catch (e) { /* без хранилища — ок */ } }
+  function count() { return Object.keys(cart).reduce(function (n, id) { return n + cart[id]; }, 0); }
+  function subtotal() { return Object.keys(cart).reduce(function (n, id) { return n + cart[id] * byId[id].price; }, 0); }
+
+  var countEl = $('#cartCount');
+  var cartBtn = $('#cartBtn');
+
+  function updateCount(animate) {
+    countEl.textContent = count();
+    if (!animate) return;
+    restartAnim(countEl, 'is-bumping');
+    restartAnim(cartBtn, 'is-wiggling');
+  }
+
+  function restartAnim(el, cls) {
+    el.classList.remove(cls);
+    void el.offsetWidth; // перезапуск анимации
+    el.classList.add(cls);
+  }
+  [countEl, cartBtn].forEach(function (el) {
+    el.addEventListener('animationend', function () { el.classList.remove('is-bumping', 'is-wiggling'); });
+  });
+
+  function flyBean(fromEl, done) {
+    var from = fromEl.getBoundingClientRect();
+    var to = countEl.getBoundingClientRect();
+    var bean = document.createElement('div');
+    bean.className = 'fly-bean';
+    var x0 = from.left + from.width / 2 - 9, y0 = from.top + from.height / 2 - 12;
+    var x1 = to.left + to.width / 2 - 9, y1 = to.top + to.height / 2 - 12;
+    bean.style.left = x0 + 'px';
+    bean.style.top = y0 + 'px';
+    document.body.appendChild(bean);
+    // счётчик обновится ровно один раз — по окончании полёта или по таймеру-страховке
+    var finished = false;
+    var finish = function () { if (finished) return; finished = true; bean.remove(); done(); };
+    setTimeout(finish, 700);
+    if (!bean.animate) { finish(); return; }
+    var dx = x1 - x0, dy = y1 - y0;
+    var anim = bean.animate([
+      { transform: 'translate(0,0) rotate(0) scale(1)', opacity: 1 },
+      { transform: 'translate(' + dx * 0.5 + 'px,' + (Math.min(dy, 0) * 0.5 - 90) + 'px) rotate(200deg) scale(1.15)', opacity: 1, offset: 0.5 },
+      { transform: 'translate(' + dx + 'px,' + dy + 'px) rotate(400deg) scale(.5)', opacity: .6 }
+    ], { duration: 650, easing: 'cubic-bezier(.4,0,.6,1)' });
+    anim.onfinish = finish;
+    anim.oncancel = finish;
+  }
+
+  function addToCart(id, btn) {
+    cart[id] = (cart[id] || 0) + 1;
+    save();
+    if (btn) restartAnim(btn, 'is-bouncing');
+    var finish = function () { updateCount(true); renderCart(); };
+    if (btn) flyBean(btn, finish); else finish();
+    toast('«' + byId[id].name + '» в корзине');
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-add]');
+    if (b) addToCart(b.dataset.add, b);
+  });
+  document.addEventListener('animationend', function (e) {
+    if (e.target.classList && e.target.classList.contains('is-bouncing')) e.target.classList.remove('is-bouncing');
+  });
+
+  /* ---------- выдвижная корзина ---------- */
+  var drawer = $('#drawer');
+  var overlay = $('#overlay');
+  var form = $('#orderForm');
+  var done = $('#orderDone');
+  var foot = $('#drawerFoot');
+
+  var overlayTimer;
+
+  function openDrawer() {
+    clearTimeout(overlayTimer);
+    renderCart();
+    overlay.hidden = false;
+    void overlay.offsetWidth; // чтобы сработал transition появления
+    overlay.classList.add('is-open');
+    drawer.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('no-scroll');
+    setTimeout(function () { $('#drawerClose').focus(); }, 50);
+  }
+  function closeDrawer() {
+    overlay.classList.remove('is-open');
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('no-scroll');
+    overlayTimer = setTimeout(function () { overlay.hidden = true; }, 300);
+    if (!done.hidden) resetOrder();
+  }
+
+  function deliveryCost() {
+    var type = (form.querySelector('input[name="delivery"]:checked') || {}).value;
+    if (type === 'pickup') return { cost: 0, label: 'бесплатно' };
+    if (type === 'cdek') return { cost: 0, label: 'по тарифу СДЭК' };
+    var sub = subtotal();
+    if (sub >= FREE_FROM) return { cost: 0, label: 'бесплатно' };
+    return { cost: DELIVERY_CITY, label: rub(DELIVERY_CITY) };
+  }
+
+  function renderCart() {
+    var ids = Object.keys(cart);
+    var list = $('#cartList');
+    var empty = ids.length === 0;
+    $('#cartEmpty').hidden = !empty;
+    if (done.hidden) {
+      form.hidden = empty;
+      foot.hidden = empty;
+    }
+    list.innerHTML = ids.map(function (id) {
+      var s = byId[id];
+      return '' +
+        '<li class="cart-item">' +
+          packSVG(s) +
+          '<div>' +
+            '<div class="cart-item__name">' + s.name + '</div>' +
+            '<div class="cart-item__price">' + rub(s.price) + ' · 250 г</div>' +
+            '<div class="qty">' +
+              '<button type="button" data-qty="-1" data-id="' + id + '" aria-label="Меньше">−</button>' +
+              '<span>' + cart[id] + '</span>' +
+              '<button type="button" data-qty="1" data-id="' + id + '" aria-label="Больше">+</button>' +
+            '</div>' +
+          '</div>' +
+          '<div>' +
+            '<div class="cart-item__sum">' + rub(cart[id] * s.price) + '</div>' +
+            '<button class="cart-item__remove" type="button" data-remove="' + id + '">убрать</button>' +
+          '</div>' +
+        '</li>';
+    }).join('');
+
+    var sub = subtotal();
+    var d = deliveryCost();
+    $('#cartSubtotal').textContent = rub(sub);
+    $('#cartDelivery').textContent = d.label;
+    $('#cartTotal').textContent = rub(sub + d.cost);
+  }
+
+  $('#cartList').addEventListener('click', function (e) {
+    var q = e.target.closest('[data-qty]');
+    var r = e.target.closest('[data-remove]');
+    if (q) {
+      var id = q.dataset.id;
+      cart[id] += Number(q.dataset.qty);
+      if (cart[id] <= 0) delete cart[id];
+    } else if (r) {
+      delete cart[r.dataset.remove];
+    } else return;
+    save();
+    updateCount(true);
+    renderCart();
+  });
+
+  form.addEventListener('change', function (e) { if (e.target.name === 'delivery') renderCart(); });
+  form.addEventListener('input', function (e) { e.target.classList.remove('is-invalid'); $('#orderError').hidden = true; });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = form.elements.name;
+    var phone = form.elements.phone;
+    var digits = phone.value.replace(/\D/g, '');
+    var ok = true;
+    if (name.value.trim().length < 2) { name.classList.add('is-invalid'); ok = false; }
+    if (digits.length < 10) { phone.classList.add('is-invalid'); ok = false; }
+    $('#orderError').hidden = ok;
+    if (!ok) return;
+
+    // TODO: отправка заказа на сервер / в CRM / в Telegram-бота
+    cart = {};
+    save();
+    updateCount(true);
+    form.hidden = true;
+    foot.hidden = true;
+    $('#cartList').innerHTML = '';
+    $('#cartEmpty').hidden = true;
+    done.hidden = false;
+  });
+
+  function resetOrder() {
+    done.hidden = true;
+    form.reset();
+    renderCart();
+  }
+
+  cartBtn.addEventListener('click', openDrawer);
+  $('#drawerClose').addEventListener('click', closeDrawer);
+  overlay.addEventListener('click', closeDrawer);
+  $('#doneClose').addEventListener('click', closeDrawer);
+  $$('[data-close-drawer]').forEach(function (a) { a.addEventListener('click', closeDrawer); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && drawer.classList.contains('is-open')) closeDrawer(); });
+
+  /* ---------- тост ---------- */
+  var toastEl = $('#toast');
+  var toastTimer;
+  function toast(text) {
+    toastEl.textContent = text;
+    toastEl.classList.add('is-visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('is-visible'); }, 2200);
+  }
+
+  /* ---------- шапка и мобильное меню ---------- */
+  var header = $('.header');
+  var burger = $('#burger');
+  var nav = $('#nav');
+  function onScroll() { header.classList.toggle('is-scrolled', window.scrollY > 8); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  burger.addEventListener('click', function () {
+    var open = burger.getAttribute('aria-expanded') !== 'true';
+    burger.setAttribute('aria-expanded', String(open));
+    nav.classList.toggle('is-open', open);
+  });
+  $$('a', nav).forEach(function (a) {
+    a.addEventListener('click', function () { burger.setAttribute('aria-expanded', 'false'); nav.classList.remove('is-open'); });
+  });
+
+  /* ---------- переходы по разделам ----------
+     Прокручиваем сами, а не через адрес «#раздел»: так ссылки работают
+     и в обычном браузере, и во встроенных просмотрщиках, где такие переходы заблокированы. */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]');
+    if (!a || e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    var id = a.getAttribute('href').slice(1);
+    var target = id === 'top' || !id ? null : document.getElementById(id);
+    if (id && id !== 'top' && !target) return;
+    e.preventDefault();
+    var top = target ? target.getBoundingClientRect().top + window.scrollY - header.offsetHeight - 12 : 0;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  });
+
+  /* ---------- появление блоков ---------- */
+  function initReveal() {
+    $$('.section__head, .choose, .cafe, .review, .delivery__card, .delivery__cta, .roast').forEach(function (el) { el.classList.add('reveal'); });
+    var els = $$('.reveal');
+    if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('is-visible'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- дата последней обжарки (ближайший прошедший понедельник) ---------- */
+  function setRoastDate() {
+    var d = new Date();
+    var diff = (d.getDay() + 6) % 7; // дней с понедельника
+    d.setDate(d.getDate() - diff);
+    var months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+    $('#roastDate').textContent = 'пн, ' + d.getDate() + ' ' + months[d.getMonth()];
+    $('#year').textContent = new Date().getFullYear();
+  }
+
+  /* ---------- пар над чашкой (canvas) ----------
+     Сотни мягких полупрозрачных «облачков» поднимаются от края чашки,
+     расширяются, закручиваются общим потоком и тают — как настоящий пар. */
+  function initSteam() {
+    var box = $('#heroPhoto');
+    var canvas = $('#steamCanvas');
+    if (!box || !canvas || !canvas.getContext) return;
+    var img = $('img', box);
+    var ctx = canvas.getContext('2d');
+
+    // положение края чашки на исходном фото (доли ширины/высоты кадра)
+    var RIM_X = parseFloat(img.dataset.rimX) || 0.45;
+    var RIM_Y = parseFloat(img.dataset.rimY) || 0.69;
+    var RIM_W = parseFloat(img.dataset.rimW) || 0.4;
+
+    // мягкая «капля» пара, рисуется один раз
+    var sprite = document.createElement('canvas');
+    sprite.width = sprite.height = 128;
+    var sctx = sprite.getContext('2d');
+    var grad = sctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    grad.addColorStop(0, 'rgba(255, 248, 236, 1)');
+    grad.addColorStop(0.35, 'rgba(255, 248, 236, .55)');
+    grad.addColorStop(0.7, 'rgba(255, 248, 236, .15)');
+    grad.addColorStop(1, 'rgba(255, 248, 236, 0)');
+    sctx.fillStyle = grad;
+    sctx.fillRect(0, 0, 128, 128);
+
+    var W = 0, H = 0, K = 1, rimX = 0, rimY = 0, rimW = 0;
+    var particles = [];
+    var time = 0, spawnAcc = 0;
+
+    function layout() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = box.clientWidth; H = box.clientHeight;
+      if (!W || !H) return;
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // повторяем object-fit: cover + object-position: 50% 100%
+      var nw = img.naturalWidth || 600, nh = img.naturalHeight || 903;
+      var scale = Math.max(W / nw, H / nh);
+      var dw = nw * scale, dh = nh * scale;
+      var ox = (W - dw) / 2, oy = H - dh;
+      rimX = ox + RIM_X * dw;
+      rimY = oy + RIM_Y * dh;
+      rimW = RIM_W * dw;
+      K = W / 420; // масштаб относительно «эталонной» ширины
+    }
+
+    function spawn() {
+      var spread = (Math.random() + Math.random() - 1) * 0.5; // ближе к центру чашки
+      particles.push({
+        x: rimX + spread * rimW,
+        y: rimY - 4 * K,
+        vy: -(20 + Math.random() * 18) * K,
+        life: 4.5 + Math.random() * 3,
+        age: 0,
+        s0: (6 + Math.random() * 8) * K,
+        s1: (38 + Math.random() * 46) * K,
+        a: 0.06 + Math.random() * 0.07,
+        phase: Math.random() * Math.PI * 2,
+        drift: (Math.random() - 0.5) * 6 * K
+      });
+    }
+
+    function step(dt) {
+      time += dt;
+      spawnAcc += dt * 60;
+      while (spawnAcc > 1) { spawn(); spawnAcc -= 1; }
+      for (var i = particles.length - 1; i >= 0; i--) {
+        var p = particles[i];
+        p.age += dt;
+        if (p.age >= p.life) { particles.splice(i, 1); continue; }
+        var t = p.age / p.life;
+        var rise = Math.max(0, (rimY - p.y) / H); // насколько поднялся над чашкой
+        // общий поток: чем выше, тем сильнее колышется и закручивается
+        var flow =
+          Math.sin(p.y * 0.016 / K + time * 0.8) * 26 +
+          Math.sin(p.y * 0.043 / K - time * 1.35) * 14 +
+          Math.sin(p.y * 0.09 / K + time * 2.1 + p.phase) * 6;
+        p.x += (flow * K * (0.25 + rise * 1.8) + p.drift) * dt;
+        p.y += p.vy * (1 - t * 0.45) * dt;
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        var t = p.age / p.life;
+        var alpha = p.a * Math.min(1, t / 0.15) * Math.pow(1 - t, 1.6);
+        if (alpha <= 0.002) continue;
+        var size = p.s0 + (p.s1 - p.s0) * Math.pow(t, 0.8);
+        ctx.globalAlpha = alpha;
+        ctx.drawImage(sprite, p.x - size / 2, p.y - size * 0.6, size, size * 1.2);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    var running = false, last = 0, visible = true;
+    function frame(now) {
+      if (!running) return;
+      var dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      step(dt);
+      draw();
+      requestAnimationFrame(frame);
+    }
+    function start() {
+      if (running || !visible || document.hidden) return;
+      running = true;
+      last = performance.now();
+      requestAnimationFrame(frame);
+    }
+    function stop() { running = false; }
+
+    layout();
+    for (var i = 0; i < 300; i++) step(1 / 50); // пар уже есть при загрузке
+    draw();
+
+    if (!img.complete) img.addEventListener('load', function () { layout(); particles = []; for (var j = 0; j < 300; j++) step(1 / 50); draw(); });
+    if ('ResizeObserver' in window) new ResizeObserver(layout).observe(box);
+    else window.addEventListener('resize', layout);
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+        if (visible) start(); else stop();
+      }).observe(box);
+    }
+    document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+    start();
+  }
+
+  /* ---------- старт ---------- */
+  initSteam();
+  renderSorts();
+  renderRoast();
+  renderMenu();
+  initChoose();
+  initReveal();
+  setRoastDate();
+  updateCount(false);
+  renderCart();
+})();
+</script>
+</body>
+</html>
